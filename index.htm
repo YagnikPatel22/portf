@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yagnik Patel — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f9f7f4;
+      --fg: #1a1814;
+      --muted: #8a8478;
+      --accent: #2b2925;
+      --border: #e4e0d9;
+      --card: #ffffff;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Jost', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(249,247,244,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--fg);
+      text-decoration: none;
+      white-space: nowrap;
+      z-index: 101;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--fg); }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 101;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--fg);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* mobile drawer */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg);
+      z-index: 99;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      color: var(--fg);
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeUp 0.4s forwards;
+    }
+    .mobile-menu a:nth-child(1) { animation-delay: 0.05s; }
+    .mobile-menu a:nth-child(2) { animation-delay: 0.1s; }
+    .mobile-menu a:nth-child(3) { animation-delay: 0.15s; }
+    .mobile-menu a:nth-child(4) { animation-delay: 0.2s; }
+    .mobile-menu a:nth-child(5) { animation-delay: 0.25s; }
+
+    /* ── SECTIONS ── */
+    section { padding: 7rem 3rem; max-width: 900px; margin: 0 auto; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding-top: 8rem; padding-bottom: 4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.1s forwards;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(3.8rem, 9vw, 7rem);
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+      opacity: 0;
+      animation: fadeUp 0.7s 0.25s forwards;
+    }
+    h1 em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .hero-sub {
+      margin-top: 2rem;
+      max-width: 480px;
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: #5a5650;
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s forwards;
+    }
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.55s forwards;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.8rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.25s;
+    }
+    .btn-primary {
+      background: var(--fg);
+      color: var(--bg);
+    }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--fg);
+      background: transparent;
+    }
+    .btn-ghost:hover { border-color: var(--fg); }
+
+    /* ── SECTION HEADERS ── */
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.015em;
+      margin-bottom: 1.5rem;
+    }
+    h2 em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--muted);
+    }
+      width: 2.5rem; height: 1px;
+      background: #2b2925;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { border-bottom: 1px solid var(--border); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-text p {
+      font-size: 1.02rem;
+      font-weight: 400;
+      color: #3d3a35;
+      line-height: 1.9;
+      margin-bottom: 1.1rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-meta { padding-top: 0.5rem; }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .meta-item:first-child { border-top: 1px solid var(--border); }
+    .meta-key {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+    .meta-val { font-size: 0.95rem; font-weight: 400; }
+
+    /* ── SKILLS ── */
+    #skills { border-bottom: 1px solid var(--border); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .skill-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+    .skill-name {
+      font-weight: 600;
+      font-size: 0.92rem;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.4rem;
+    }
+    .skill-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { border-bottom: 1px solid var(--border); }
+    .projects-list { display: flex; flex-direction: column; gap: 0; }
+    .project-item {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 2rem;
+      align-items: center;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+    }
+    .project-item:first-child { border-top: 1px solid var(--border); }
+    .project-item:hover .project-title { color: var(--accent); }
+    .project-item:hover .project-arrow { transform: translateX(4px); }
+    .project-tag {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .project-title {
+      font-family: var(--serif);
+      font-size: 1.65rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+    }
+    .project-desc {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .project-arrow {
+      justify-self: end;
+      font-size: 1.4rem;
+      color: var(--muted);
+      transition: transform 0.2s, color 0.2s;
+    }
+    .project-item:hover .project-arrow { color: var(--accent); }
+
+    /* ── WRITING ── */
+    #writing { border-bottom: 1px solid var(--border); }
+    .writing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .writing-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .writing-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .writing-date {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .writing-title {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+    .writing-excerpt {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .writing-read {
+      margin-top: 1.2rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--fg);
+    }
+
+    /* ── CONTACT ── */
+    #contact { border-bottom: 1px solid var(--border); }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-text {
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: #5a5650;
+      line-height: 1.85;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 0; }
+    .contact-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--fg);
+      font-weight: 400;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .contact-link:first-child { border-top: 1px solid var(--border); }
+    .contact-link:hover { color: var(--accent); }
+    .contact-link span { font-size: 0.9rem; color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem 3rem;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      section { padding: 4.5rem 1.25rem 3.5rem; }
+      #hero { padding-top: 5.5rem; padding-bottom: 3rem; min-height: auto; }
+
+      h1 { font-size: clamp(2.4rem, 11vw, 3.2rem); }
+      h2 { font-size: clamp(1.7rem, 6vw, 2.2rem); }
+
+      .hero-sub { font-size: 0.97rem; }
+      .hero-cta { flex-direction: column; gap: 0.75rem; }
+      .btn { text-align: center; padding: 0.85rem 1.5rem; font-size: 0.8rem; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .skills-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .skill-card { padding: 1.1rem; }
+      .skill-icon { font-size: 1.1rem; margin-bottom: 0.5rem; }
+      .skill-name { font-size: 0.88rem; }
+      .skill-desc { font-size: 0.78rem; }
+
+      .writing-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .writing-card { padding: 1.25rem; }
+      .writing-title { font-size: 1.1rem; }
+
+      .project-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .project-arrow { display: none; }
+      .project-title { font-size: 1.25rem; }
+
+      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+      footer { flex-direction: column; gap: 0.4rem; text-align: center; padding: 2rem 1.25rem; }
+    }
+    @media (max-width: 400px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">Yagnik Patel</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" class="mob-link">About</a>
+    <a href="#skills" class="mob-link">Skills</a>
+    <a href="#projects" class="mob-link">Projects</a>
+    <a href="#writing" class="mob-link">Writing</a>
+    <a href="#contact" class="mob-link">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-label">ICT Engineering · AI · Music</p>
+    <h1>Yagnik<br><em>Patel.</em></h1>
+    <p class="hero-sub">
+      I'm a second-year ICT Engineering student at DA-IICT who builds things at the intersection of technology and meaning — through writing, and film.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label reveal">About</p>
+    <h2 class="reveal">Curious by nature,<br><em style="font-family:var(--serif);font-style:italic;color:var(--muted)">deliberate by practice.</em></h2>
+    <div class="section-divider reveal"></div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm Yagnik — an ICT Engineering student with a deep interest in how technology, storytelling, and human behavior intersect. I build things that are functional, but I care equally about the meaning behind them.
+        </p>
+        <p>
+          Outside coursework in robotics, communications systems, and probability, I spend time writing opinion pieces, editing videos in DaVinci Resolve, and reading broadly — psychology, philosophy, geopolitics. The thread connecting it all: understanding how people think and how ideas move through the world.
+        </p>
+        <p>
+          Long-term, I want to build something — a product, a film, a company — that stands at the intersection of technology and genuine human value.
+        </p>
+      </div>
+      <div class="about-meta reveal">
+        <div class="meta-item">
+          <span class="meta-key">Currently</span>
+          <span class="meta-val">B.Tech ICT, DA-IICT, Year 2</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Location</span>
+          <span class="meta-val">Gandhinagar, Gujarat, India</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Interests</span>
+          <span class="meta-val">Robotics · Film · Writing · Geopolitics</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Mail</span>
+          <span class="meta-val">yagnikpatel@zohomail.in</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label reveal">Skills</p>
+    <h2 class="reveal">What I bring<br><em style="font-family:var(--serif);font-style:italic;color:var(--muted)">to the table.</em></h2>
+    <div class="section-divider reveal"></div>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-icon">⚙️</div>
+        <div class="skill-name">Embedded & Robotics</div>
+        <div class="skill-desc">Arduino, Braccio arm, kinematics, Denavit-Hartenberg, Jacobians</div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">📡</div>
+        <div class="skill-name">Communications Systems</div>
+        <div class="skill-desc">Channel coding, modulation (PSK/QAM), source coding, detection theory</div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🔌</div>
+        <div class="skill-name">Digital Logic</div>
+        <div class="skill-desc">Verilog HDL — behavioral, RTL, and structural design; simulation on EDA Playground</div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🎬</div>
+        <div class="skill-name">Video Editing</div>
+        <div class="skill-desc">DaVinci Resolve — color grading, narrative editing, storytelling through film</div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">✍️</div>
+        <div class="skill-name">Writing</div>
+        <div class="skill-desc">Opinion pieces, analysis, long-form essays on technology, politics, and human behavior</div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🧠</div>
+        <div class="skill-name">Research & Analysis</div>
+        <div class="skill-desc">Survey writing, literature synthesis, academic papers (e.g. JCAS systems)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label reveal">Projects</p>
+    <h2 class="reveal">Things I've<br><em style="font-family:var(--serif);font-style:italic;color:var(--muted)">built & explored.</em></h2>
+    <div class="section-divider reveal"></div>
+    <div class="projects-list">
+
+      <a href="https://yagnikpatel22.github.io" target="_blank" class="project-item reveal">
+        <div>
+          <p class="project-tag">Web · Personal</p>
+          <h3 class="project-title">Personal Portfolio Website</h3>
+          <p class="project-desc">A single-file HTML portfolio featuring a movies section with 60+ curated film cards (with IMDb ratings), a books section, writing pieces, and a search bar — built with refined attention to design.</p>
+        </div>
+        
+      </a>
+
+      <div class="project-item reveal" style="cursor:default;">
+        <div>
+          <p class="project-tag">Robotics · IE410</p>
+          <h3 class="project-title">Braccio Robotic Arm Control</h3>
+          <p class="project-desc">Arduino-based joint movement and gripper control for the Tinkerkit Braccio arm. Implemented D-H parameters, forward kinematics, and trajectory programming.</p>
+        </div>
+        
+      </div>
+
+      <div class="project-item reveal" style="cursor:default;">
+        <div>
+          <p class="project-tag">Digital Logic · EL203</p>
+          <h3 class="project-title">Majority/Minority Voter in Verilog</h3>
+          <p class="project-desc">3-input voter circuit implemented at behavioral, RTL, and structural abstraction levels. Simulated with Icarus Verilog on EDA Playground with full testbench coverage.</p>
+        </div>
+      
+      </div>
+
+      <div class="project-item reveal" style="cursor:default;">
+        <div>
+          <p class="project-tag">Communications · Research</p>
+          <h3 class="project-title">JCAS Survey Paper</h3>
+          <p class="project-desc">Group survey paper on Joint Communication and Radar Sensing (JCAS) systems for a Wireless Communications course. Authored sections IV and V covering system architectures and performance tradeoffs.</p>
+        </div>
+       
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section id="writing">
+    <p class="section-label reveal">Writing</p>
+    <h2 class="reveal">Ideas I keep<br><em style="font-family:var(--serif);font-style:italic;color:var(--muted)">thinking about.</em></h2>
+    <div class="section-divider reveal"></div>
+    <div class="writing-grid">
+      <a href="https://yagnikpatel22.github.io" target="_blank" class="writing-card reveal">
+        <span class="writing-date">2026 · Opinion</span>
+        <h3 class="writing-title">The Epstein Files & Systemic Impunity</h3>
+        <p class="writing-excerpt">An examination of what the Epstein case reveals about two-tiered justice, institutional silence, and the architecture of power that protects those at the top.</p>
+        <span class="writing-read">Read →</span>
+      </a>
+      <a href="https://yagnikpatel22.github.io" target="_blank" class="writing-card reveal">
+        <span class="writing-date">2026 · Technology</span>
+        <h3 class="writing-title">On Information Consumption in the Algorithm Age</h3>
+        <p class="writing-excerpt">How curated feeds reshape what we believe, what we miss, and why deliberate reading might be the most countercultural act left in the digital era.</p>
+        <span class="writing-read">Read →</span>
+      </a>
+      <a href="https://yagnikpatel22.github.io" target="_blank" class="writing-card reveal">
+        <span class="writing-date">2026 · Human Behavior</span>
+        <h3 class="writing-title">Influence Without Authority</h3>
+        <p class="writing-excerpt">Drawing from Cialdini and Greene — how persuasion actually works, why most people misunderstand it, and what it means to use it with intention.</p>
+        <span class="writing-read">Read →</span>
+      </a>
+      <a href="https://yagnikpatel22.github.io" target="_blank" class="writing-card reveal">
+        <span class="writing-date">2025 · Film</span>
+        <h3 class="writing-title">What Cinema Teaches You About Editing Reality</h3>
+        <p class="writing-excerpt">Working in DaVinci Resolve changed how I think about time, attention, and the way narrative shapes perception — in film and in life.</p>
+        <span class="writing-read">Read →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label reveal">Contact</p>
+    <h2 class="reveal">Let's build<br><em style="font-family:var(--serif);font-style:italic;color:var(--muted)">something.</em></h2>
+    <div class="section-divider reveal"></div>
+    <div class="contact-inner">
+      <p class="contact-text reveal">
+        I'm always open to interesting conversations — whether about a project, a collaboration, or just an idea worth exploring. Reach out and let's talk.
+      </p>
+      <div class="contact-links reveal">
+        <a href="yags.vercel.app" target="_blank" class="contact-link">
+          Portfolio Website <span>↗</span>
+        </a>
+        <a href="emailto:yagnikptl22@gmail.com" class="contact-link">
+          Email <span>↗</span>
+        </a>
+        <a href="https://github.com/yagnikpatel22" target="_blank" class="contact-link">
+          GitHub <span>↗</span>
+        </a>
+        <a href="https://linkedin.com/in/yagnik-n-patel" target="_blank" class="contact-link">
+          LinkedIn <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026, Yagnik N. Patel</span>
+    <span>Gujarat, India!</span>
+  </footer>
+
+    <script>
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    document.querySelectorAll('.mob-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+</body>
+</html>
